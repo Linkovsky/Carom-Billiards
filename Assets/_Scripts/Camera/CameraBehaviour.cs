@@ -1,3 +1,5 @@
+using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace CaromBilliards.CameraSettings
@@ -5,33 +7,42 @@ namespace CaromBilliards.CameraSettings
     public class CameraBehaviour : MonoBehaviour
     {
         [SerializeField] private Camera cam;
-        [SerializeField] private float distanceToPlayer = -3;
+        [SerializeField] private Vector3 minBoundValue, maxBoundValue;
         [SerializeField, Range(0, 360)] private float rotationSpeed;
-    
-        private Vector3 previousPosition;
-        private Transform playerTransform;
+        
+        private Transform _parentTransform;
+        private Transform _cameraTransform;
+        private Transform _playerTransform;
+        
+        private Vector3 _previousPosition;
+        private Vector3 _offSet;
+        
+        private float _getInputValue;
         private void Awake()
         {
-            playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+            _parentTransform = GetComponent<Transform>();
+            _cameraTransform = GetComponentInChildren<Transform>();
+            _playerTransform = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         }
 
         private void Start()
         {
-        
-            //Setting camera's position equal to the white ball position except for the Z value to give depth
-            cam.transform.position = new Vector3(playerTransform.position.x, playerTransform.position.y, distanceToPlayer);
+            _offSet = _cameraTransform.position - _playerTransform.position;
+            _cameraTransform.position = _offSet;
         }
 
-        void Update()
+        private void LateUpdate()
         {
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
             {
-                previousPosition = cam.ScreenToViewportPoint(Input.mousePosition);
+                _previousPosition = cam.ScreenToViewportPoint(Input.mousePosition);
             }
-            else if (Input.GetMouseButton(0))
+            else if (Input.GetMouseButton(0) || Input.GetMouseButton(1))
             {
                 RotateCamera();
+                
             }
+            _cameraTransform.position = _playerTransform.position + _offSet;
         }
     
         /// <summary>
@@ -40,19 +51,17 @@ namespace CaromBilliards.CameraSettings
         private void RotateCamera()
         {
             Vector3 newPosition = cam.ScreenToViewportPoint(Input.mousePosition);
-            Vector3 direction = previousPosition - newPosition;
+            Vector3 direction = _previousPosition - newPosition;
             
             float rotationAroundYAxis = -direction.x * rotationSpeed; // camera moves horizontally
             float rotationAroundXAxis = direction.y * rotationSpeed; // camera moves vertically
             
-            cam.transform.position = playerTransform.position;
+            _parentTransform.position = _playerTransform.position;
             
-            cam.transform.Rotate(new Vector3(1, 0, 0), rotationAroundXAxis);
-            cam.transform.Rotate(new Vector3(0, 1, 0), rotationAroundYAxis, Space.World); 
+            _parentTransform.Rotate(new Vector3(1, 0, 0), rotationAroundXAxis);
+            _parentTransform.Rotate(new Vector3(0, 1, 0), rotationAroundYAxis, Space.World);
             
-            cam.transform.Translate(new Vector3(0, 0, distanceToPlayer));
-            
-            previousPosition = newPosition;
+            _previousPosition = newPosition;
         }
     }
 }
