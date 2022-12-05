@@ -1,4 +1,6 @@
 using System;
+using CaromBilliards.BallType;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -8,25 +10,25 @@ namespace CaromBilliards.Player_Input
     {
         [SerializeField] private Transform parentOfCamTransform;
         [SerializeField] private LineRenderer lineRenderer;
+        [SerializeField] private BallSO respectiveBall;
         [SerializeField] private float distanceRay;
         [SerializeField] private float forceSpeed;
-
+        
         private Transform _transform;
         private Rigidbody _myRigidbody;
         private SphereCollider _sphereCollider;
         private float _rotation;
         private float _actualradius;
+        
         private void Awake()
         {
+            respectiveBall.ApplyMaterial(GetComponent<MeshRenderer>());
             _myRigidbody = GetComponent<Rigidbody>();
-            _transform = GetComponent<Transform>();
             _sphereCollider = GetComponent<SphereCollider>();
+            _transform = GetComponent<Transform>();
         }
 
-        private void Start()
-        {
-            _actualradius = _sphereCollider.radius * Mathf.Max(_transform.lossyScale.x,_transform.lossyScale.y,_transform.lossyScale.z);
-        }
+        private void Start() => _actualradius = _sphereCollider.radius * Mathf.Max(_transform.lossyScale.x,_transform.lossyScale.y,_transform.lossyScale.z);
 
         private void Update()
         {
@@ -41,13 +43,9 @@ namespace CaromBilliards.Player_Input
                 }
             }
             else
-            {
                 lineRenderer.enabled = false;
-            }
             if (Input.GetKey(KeyCode.Space))
-            {
                 _myRigidbody.AddForce(_transform.forward * forceSpeed, ForceMode.Impulse);
-            }
         }
         
         /// <summary>
@@ -66,6 +64,15 @@ namespace CaromBilliards.Player_Input
         private Ray ShootRay(float value)
         {
             return new Ray(_transform.position, _transform.forward * value);
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (collision.gameObject.layer == 6)
+            {
+                _transform.position = new Vector3(_transform.position.x, 0.0325f, _transform.position.z);
+                _myRigidbody.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotation;
+            }
         }
     }
 }

@@ -7,11 +7,9 @@ namespace CaromBilliards.CameraSettings
     public class CameraBehaviour : MonoBehaviour
     {
         [SerializeField] private Camera cam;
-        [SerializeField] private Vector3 minBoundValue, maxBoundValue;
         [SerializeField, Range(0, 360)] private float rotationSpeed;
         
         private Transform _parentTransform;
-        private Transform _cameraTransform;
         private Transform _playerTransform;
         
         private Vector3 _previousPosition;
@@ -21,16 +19,9 @@ namespace CaromBilliards.CameraSettings
         private void Awake()
         {
             _parentTransform = GetComponent<Transform>();
-            _cameraTransform = GetComponentInChildren<Transform>();
             _playerTransform = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         }
-
-        private void Start()
-        {
-            _offSet = _cameraTransform.position - _playerTransform.position;
-            _cameraTransform.position = _offSet;
-        }
-
+        
         private void LateUpdate()
         {
             if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
@@ -42,7 +33,7 @@ namespace CaromBilliards.CameraSettings
                 RotateCamera();
                 
             }
-            _cameraTransform.position = _playerTransform.position + _offSet;
+            _parentTransform.position = _playerTransform.position;
         }
     
         /// <summary>
