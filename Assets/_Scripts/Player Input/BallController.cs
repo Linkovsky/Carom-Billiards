@@ -1,18 +1,19 @@
 using CaromBilliards.BallType;
 using CaromBilliards.CoreMechanic;
-using CaromBilliards.CoreMechanic.ScoreBoard;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace CaromBilliards.Player_Input
 {
     public class BallController : MonoBehaviour
     {
+        [field: SerializeField] public float timePower { get; private set; }
+        public bool isShooting { get; private set; }
         [SerializeField] private Transform parentOfCamTransform;
         [SerializeField] private LineRenderer lineRenderer;
         [SerializeField] private BallSO respectiveBall;
         [SerializeField] private float distanceRay;
-        [SerializeField] private float forceSpeed;
-        
+        [FormerlySerializedAs("forceSpeed")] [SerializeField] private float powerShot;
         private Transform _transform;
         private Rigidbody _myRigidbody;
         private SphereCollider _sphereCollider;
@@ -33,20 +34,46 @@ namespace CaromBilliards.Player_Input
             if (Input.GetMouseButton(0))
             {
                 RotatePlayerWithCamera();
-                lineRenderer.enabled = true;
-                if (Physics.SphereCast(ShootRay(distanceRay), _actualRadius, out RaycastHit hit))
-                {
-                    lineRenderer.SetPosition(0, ShootRay(distanceRay).origin);
-                    lineRenderer.SetPosition(1, hit.point);
-                }
+                DrawLineRenderer();
             }
             else
                 lineRenderer.enabled = false;
-            
-            if (Input.GetKeyUp(KeyCode.Space))
+            if(GameManager.Instance != null)
+                if (!GameManager.Instance.scoreManager.IsBallMoving)
+                {
+                    CuePower();
+                }
+        }
+
+        private void DrawLineRenderer()
+        {
+            lineRenderer.enabled = true;
+            if (Physics.SphereCast(ShootRay(distanceRay), _actualRadius, out RaycastHit hit))
             {
-                _myRigidbody.AddForce(_transform.forward * forceSpeed, ForceMode.Impulse);
-                if(GameManager.Instance != null)
+                lineRenderer.SetPosition(0, ShootRay(distanceRay).origin);
+                lineRenderer.SetPosition(1, hit.point);
+            }
+        }
+        /// <summary>
+        /// Gets the amount of power to hit the cue bal as long as the player has Spacebar pressed.
+        /// Also draws the Line with LineRenderer
+        /// </summary>
+        private void CuePower()
+        {
+            if (Input.GetKey(KeyCode.Space))
+            {
+                isShooting = true;
+                DrawLineRenderer();
+                if (timePower >= 20.0f) return;
+                timePower += 6f * Time.deltaTime;
+            }
+            else if (Input.GetKeyUp(KeyCode.Space))
+            {
+                isShooting = false;
+                _myRigidbody.AddForce(_transform.forward * (powerShot * timePower), ForceMode.Impulse);
+                timePower = 0;
+                lineRenderer.enabled = false;
+                if (GameManager.Instance != null)
                     GameManager.Instance.totalShots.SetTotalShots();
             }
         }
