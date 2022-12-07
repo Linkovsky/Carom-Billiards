@@ -268,7 +268,7 @@ GameObject:
   - component: {fileID: 145923972}
   m_Layer: 0
   m_Name: Long Wall 2
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -365,7 +365,7 @@ GameObject:
   - component: {fileID: 182121896}
   m_Layer: 0
   m_Name: Small Wall
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -509,7 +509,7 @@ GameObject:
   - component: {fileID: 462908653}
   m_Layer: 0
   m_Name: Long Wall
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -1149,6 +1149,7 @@ GameObject:
   - component: {fileID: 627485214}
   - component: {fileID: 627485213}
   - component: {fileID: 627485212}
+  - component: {fileID: 627485219}
   m_Layer: 0
   m_Name: Cue Ball
   m_TagString: Player
@@ -1168,12 +1169,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 773265acd8f0c3746bba365d29b11431, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <timePower>k__BackingField: 0
   parentOfCamTransform: {fileID: 259573124}
   lineRenderer: {fileID: 518351673}
   respectiveBall: {fileID: 11400000, guid: c8d3a84c131d97a40bd33c2639c50cf7, type: 2}
   distanceRay: 10
   powerShot: 1
+  audioClips:
+  - {fileID: 8300000, guid: 9c182dea5676f5645825701f14838b13, type: 3}
+  - {fileID: 8300000, guid: b0f837d9a4d68b2499598b5c638e7959, type: 3}
+  - {fileID: 8300000, guid: ca1d31917a877a34fbeeb726903f9f97, type: 3}
+  audioMixer: {fileID: 24100000, guid: 948263764d5f64d43a24ccc599874935, type: 2}
 --- !u!135 &627485213
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1268,6 +1273,102 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &627485219
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 627485211}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: -6980062791828256565, guid: 948263764d5f64d43a24ccc599874935, type: 2}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &651911068
 GameObject:
   m_ObjectHideFlags: 0
@@ -2811,7 +2912,7 @@ GameObject:
   - component: {fileID: 1378067610}
   m_Layer: 0
   m_Name: Small Wall 2
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -4379,21 +4480,9 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 688660008, guid: ad4c155a4fb8ade41891800acc2d4348, type: 3}
-      propertyPath: m_Constraints
-      value: 116
-      objectReference: {fileID: 0}
-    - target: {fileID: 688660008, guid: ad4c155a4fb8ade41891800acc2d4348, type: 3}
-      propertyPath: m_CollisionDetection
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 568015152807705266, guid: ad4c155a4fb8ade41891800acc2d4348, type: 3}
       propertyPath: m_Name
       value: Yellow Ball
-      objectReference: {fileID: 0}
-    - target: {fileID: 568015152807705266, guid: ad4c155a4fb8ade41891800acc2d4348, type: 3}
-      propertyPath: m_TagString
-      value: Ball
       objectReference: {fileID: 0}
     - target: {fileID: 568015152807705278, guid: ad4c155a4fb8ade41891800acc2d4348, type: 3}
       propertyPath: m_RootOrder
@@ -4450,21 +4539,9 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1128705101, guid: 9a8f2e805d182464ebdfca69cafc1dbb, type: 3}
-      propertyPath: m_Constraints
-      value: 116
-      objectReference: {fileID: 0}
-    - target: {fileID: 1128705101, guid: 9a8f2e805d182464ebdfca69cafc1dbb, type: 3}
-      propertyPath: m_CollisionDetection
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 9004480263843815202, guid: 9a8f2e805d182464ebdfca69cafc1dbb, type: 3}
       propertyPath: m_RootOrder
       value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 9004480263843815202, guid: 9a8f2e805d182464ebdfca69cafc1dbb, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.065
       objectReference: {fileID: 0}
     - target: {fileID: 9004480263843815202, guid: 9a8f2e805d182464ebdfca69cafc1dbb, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4509,10 +4586,6 @@ PrefabInstance:
     - target: {fileID: 9004480263843815206, guid: 9a8f2e805d182464ebdfca69cafc1dbb, type: 3}
       propertyPath: m_Name
       value: Red Ball
-      objectReference: {fileID: 0}
-    - target: {fileID: 9004480263843815206, guid: 9a8f2e805d182464ebdfca69cafc1dbb, type: 3}
-      propertyPath: m_TagString
-      value: Ball
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []

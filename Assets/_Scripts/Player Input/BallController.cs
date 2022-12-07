@@ -1,22 +1,27 @@
 using CaromBilliards.BallType;
 using CaromBilliards.CoreMechanic;
+using CaromBilliards.Sounds;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.Serialization;
 
 namespace CaromBilliards.Player_Input
 {
     public class BallController : MonoBehaviour
     {
-        [field: SerializeField] public float timePower { get; private set; }
+        [field: HideInInspector] public float timePower { get; private set; }
         public bool isShooting { get; private set; }
         [SerializeField] private Transform parentOfCamTransform;
         [SerializeField] private LineRenderer lineRenderer;
         [SerializeField] private BallSO respectiveBall;
         [SerializeField] private float distanceRay;
         [FormerlySerializedAs("forceSpeed")] [SerializeField] private float powerShot;
+        [SerializeField] private AudioClip[] audioClips;
+        [SerializeField] private AudioMixer audioMixer;
         private Transform _transform;
         private Rigidbody _myRigidbody;
         private SphereCollider _sphereCollider;
+        private AudioSource _audioSource;
         private float _rotation;
         private float _actualRadius;
         private void Awake()
@@ -25,6 +30,7 @@ namespace CaromBilliards.Player_Input
             _myRigidbody = GetComponent<Rigidbody>();
             _sphereCollider = GetComponent<SphereCollider>();
             _transform = GetComponent<Transform>();
+            _audioSource = GetComponent<AudioSource>();
         }
 
         private void Start()
@@ -69,10 +75,11 @@ namespace CaromBilliards.Player_Input
                 isShooting = true;
                 DrawLineRenderer();
                 if (timePower >= 20.0f) return;
-                timePower += 6f * Time.deltaTime;
+                timePower += 10f * Time.deltaTime;
             }
             else if (Input.GetKeyUp(KeyCode.Space))
             {
+                _audioSource.PlayOneShot(audioClips[0]);
                 isShooting = false;
                 _myRigidbody.AddForce(_transform.forward * (powerShot * timePower), ForceMode.Impulse);
                 timePower = 0;
@@ -108,7 +115,15 @@ namespace CaromBilliards.Player_Input
             }
             if(collision.gameObject.CompareTag("Ball"))
             {
+                _audioSource.PlayOneShot(audioClips[1]);
                 GameManager.Instance.scoreManager.AddCollidedScore(collision.gameObject.name);
+            }
+            else if (collision.gameObject.CompareTag("Wall"))
+            {
+                audioMixer.GetFloat("MasterVolume", out float value);
+                _audioSource.volume = Mathf.Clamp01(collision.relativeVelocity.magnitude / 20f);
+                _audioSource.clip = audioClips[2];
+                _audioSource.Play();
             }
         }
     }

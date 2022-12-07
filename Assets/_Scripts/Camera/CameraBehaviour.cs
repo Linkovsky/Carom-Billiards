@@ -31,7 +31,6 @@ namespace CaromBilliards.CameraSettings
             else if (Input.GetMouseButton(0))
             {
                 RotateCamera();
-                
             }
             _parentTransform.position = _playerTransform.position;
         }

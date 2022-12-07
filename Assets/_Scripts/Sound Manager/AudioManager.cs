@@ -10,7 +10,7 @@ namespace CaromBilliards.Sounds
     public class AudioManager : MonoBehaviour
     {
         internal static AudioManager Instance;
-        [SerializeField] private AudioMixer audioMixer;
+        public AudioMixer audioMixer;
     
         [HideInInspector] public string path;
 
