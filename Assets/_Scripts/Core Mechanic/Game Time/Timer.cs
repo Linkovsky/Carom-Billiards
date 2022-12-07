@@ -1,18 +1,23 @@
 using System;
+using System.Security.Cryptography.X509Certificates;
 using TMPro;
 
 namespace CaromBilliards.CoreMechanic.Time
 {
+    [Serializable]
     public struct Timer
     {
         public TextMeshProUGUI TimeElapsed
         {
-            set => _timeElapsedText = value;
+            get => _timeElapsedText;
+
+            set => _timeElapsedText = value; 
         }
+        
         
         private TextMeshProUGUI _timeElapsedText;
         
-        private float _timeElapsed;
+        public float timeElapsedInUnity;
         private float _time;
         private int _seconds;
         private int _minutes;
@@ -20,8 +25,8 @@ namespace CaromBilliards.CoreMechanic.Time
         
         public void HowMuchTimePassedSinceStart()
         {
-            _timeElapsed += UnityEngine.Time.deltaTime;
-            _time = _timeElapsed;
+            timeElapsedInUnity += UnityEngine.Time.deltaTime;
+            _time = timeElapsedInUnity;
             _seconds = (int)(_time % 60); // return the remainder of the seconds divide by 60 as an int
             _time /= 60;
             _minutes = (int)(_time % 60); //return the remainder of the minutes divide by 60 as an int

@@ -24,11 +24,11 @@ namespace CaromBilliards.CameraSettings
         
         private void LateUpdate()
         {
-            if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
+            if (Input.GetMouseButtonDown(0))
             {
                 _previousPosition = cam.ScreenToViewportPoint(Input.mousePosition);
             }
-            else if (Input.GetMouseButton(0) || Input.GetMouseButton(1))
+            else if (Input.GetMouseButton(0))
             {
                 RotateCamera();
                 

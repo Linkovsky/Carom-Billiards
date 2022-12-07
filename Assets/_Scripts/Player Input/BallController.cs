@@ -27,22 +27,26 @@ namespace CaromBilliards.Player_Input
             _transform = GetComponent<Transform>();
         }
 
-        private void Start() => _actualRadius = _sphereCollider.radius * Mathf.Max(_transform.lossyScale.x,_transform.lossyScale.y,_transform.lossyScale.z);
+        private void Start()
+        {
+            _actualRadius = _sphereCollider.radius * Mathf.Max(_transform.lossyScale.x,_transform.lossyScale.y,_transform.lossyScale.z);
+        } 
 
         private void Update()
         {
-            if (Input.GetMouseButton(0))
+            if (GameManager.Instance == null) return;
+            if (GameManager.Instance.scoreManager.gameCompleted) return;
+            if (Input.GetMouseButton(0) && !GameManager.Instance.scoreManager.isBallMoving)
             {
                 RotatePlayerWithCamera();
                 DrawLineRenderer();
             }
             else
                 lineRenderer.enabled = false;
-            if(GameManager.Instance != null)
-                if (!GameManager.Instance.scoreManager.IsBallMoving)
-                {
-                    CuePower();
-                }
+            if (!GameManager.Instance.scoreManager.isBallMoving)
+            { 
+                CuePower();
+            }
         }
 
         private void DrawLineRenderer()
@@ -73,8 +77,7 @@ namespace CaromBilliards.Player_Input
                 _myRigidbody.AddForce(_transform.forward * (powerShot * timePower), ForceMode.Impulse);
                 timePower = 0;
                 lineRenderer.enabled = false;
-                if (GameManager.Instance != null)
-                    GameManager.Instance.totalShots.SetTotalShots();
+                GameManager.Instance.totalShotsManager.SetTotalShots();
             }
         }
 
@@ -105,8 +108,7 @@ namespace CaromBilliards.Player_Input
             }
             if(collision.gameObject.CompareTag("Ball"))
             {
-                if(GameManager.Instance != null) 
-                    GameManager.Instance.scoreManager.AddCollidedScore(collision.gameObject.name);
+                GameManager.Instance.scoreManager.AddCollidedScore(collision.gameObject.name);
             }
         }
     }
