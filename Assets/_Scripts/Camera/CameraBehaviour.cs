@@ -22,6 +22,12 @@ namespace CaromBilliards.CameraSettings
             _playerTransform = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         }
         
+        /// <summary>
+        /// After Update, LateUpdate runs. Here we search for mouse input, save it in a variable as the last position
+        /// where it was first touched.
+        /// Rotates the camera based on players position
+        /// And sets the parent transform where the camera is a child of to be equal to players' position.
+        /// </summary>
         private void LateUpdate()
         {
             if (Input.GetMouseButtonDown(0))

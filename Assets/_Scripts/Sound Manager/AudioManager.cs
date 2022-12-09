@@ -30,7 +30,11 @@ namespace CaromBilliards.Sounds
                 audioMixer.SetFloat(_volumeMaster, Mathf.Log10(value) * 20f);
             }
         }
-
+        /// <summary>
+        /// We assign we get from the slider to the object.value (float).
+        /// We then create a file using the filestream and write to the file using the streamreader.
+        /// </summary>
+        /// <param name="sliderValue">Value assigned in the slider</param>
         internal void SaveToJSON(float sliderValue)
         {
             _loadSoundValue.value = sliderValue;
@@ -41,6 +45,11 @@ namespace CaromBilliards.Sounds
             streamWriter.Close();
             fileStream.Close();
         }
+        /// <summary>
+        /// We use the filestream to open the file and the streamreader to read from the file we just opened.
+        /// We then assign to a object using the jsonutility to get the values from the file
+        /// </summary>
+        /// <returns></returns>
         internal float LoadFromJSON()
         {
             using FileStream fileStream = new FileStream(path, FileMode.Open);

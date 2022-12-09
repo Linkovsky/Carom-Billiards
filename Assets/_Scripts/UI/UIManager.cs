@@ -9,10 +9,6 @@ namespace CaromBilliards.CoreMechanic.UI
 {
     public class UIManager : MonoBehaviour
     {
-        public GameObject ReplayButton
-        {
-            get => replayButton;
-        }
         [SerializeField] private Animation endScreenAnim;
         [SerializeField] private TextMeshProUGUI shots;
         [SerializeField] private TextMeshProUGUI score;
@@ -34,10 +30,22 @@ namespace CaromBilliards.CoreMechanic.UI
 
         private void Update()
         {
+            // If the game is completed the button should be hidden away from the player
+            if(GameManager.Instance.scoreManager.gameCompleted)
+            {
+                replayButton.SetActive(false);
+                return;
+            }
+            // The button is active or not based on the conditions if the player can shoot and it's not using playback
             if(GameManager.Instance.totalShotsManager.totalShotsMade > 0)
                 replayButton.SetActive(_ballController.CanPlay && !_replay.Playback);
         }
-
+        /// <summary>
+        /// Assigns all the values receive to the strings of the ui and plays the animation
+        /// </summary>
+        /// <param name="shotsText">The incoming result of the shots</param>
+        /// <param name="scoreText">The incoming result of the score</param>
+        /// <param name="timeText">The incoming result of the time</param>
         public void DrawEndScreen(string shotsText, string scoreText, string timeText)
         {
             if (GameManager.Instance != null)
@@ -55,4 +63,3 @@ namespace CaromBilliards.CoreMechanic.UI
         }
     }
 }
-

@@ -23,6 +23,11 @@ namespace CaromBilliards.CoreMechanic.Time
         private int _minutes;
         private int _hours;
         
+        /// <summary>
+        /// Updates the time as time goes using deltatime of unity. Increment the variable over time and save it on
+        /// another variable for us to be able to make some mathematics do determine the seconds, minutes and hours.
+        /// Then we assign the values to the textmeshpro formatting the string correctly. 
+        /// </summary>
         public void HowMuchTimePassedSinceStart()
         {
             timeElapsedInUnity += UnityEngine.Time.deltaTime;

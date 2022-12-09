@@ -41,7 +41,12 @@ namespace CaromBilliards.CoreMechanic.PlayState
         {
             _waitTime = new WaitForSeconds(0.5f);
         }
-        
+        /// <summary>
+        /// In a while loop we do a foreach for every rigidbody we have in the scene and check if all of them
+        /// are stopped based on their velocity sqrmagnitude.
+        /// We then invoke to all the classes that are listening.
+        /// </summary>
+        /// <returns> All objects stopped moving or not.</returns>
         private IEnumerator CheckIfRigidbodysAreMoving()
         {
             while (!_allStopped)

@@ -11,14 +11,16 @@ namespace CaromBilliards.CoreMechanic.UI.Visuals
         [SerializeField] private GameObject _powerGaugeUI;
         [SerializeField] private Image _powerGauge;
         private BallController _ballController;
+        private bool _isInstanceNull;
+
         private void Awake()
         {
-        
             _ballController = GameObject.FindGameObjectWithTag("Player").GetComponent<BallController>();
         }
 
         private void Start()
         {
+            _isInstanceNull = GameManager.Instance == null;
             ResetAmount();
         }
 
@@ -30,7 +32,7 @@ namespace CaromBilliards.CoreMechanic.UI.Visuals
 
         private void Update()
         {
-            if (GameManager.Instance == null) return;
+            if (_isInstanceNull) return;
             if (!GameManager.Instance.scoreManager.isBallMoving && _ballController.isShooting)
             {
                 _powerGaugeUI.SetActive(true);
@@ -42,5 +44,4 @@ namespace CaromBilliards.CoreMechanic.UI.Visuals
             }
         }
     }
-
 }

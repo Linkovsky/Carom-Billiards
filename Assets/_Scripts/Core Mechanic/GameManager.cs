@@ -35,6 +35,10 @@ namespace CaromBilliards.CoreMechanic
         private void OnEnable() => Score.GameCompleted += GameCompleted;
         private void OnDisable() => Score.GameCompleted -= GameCompleted;
         
+        /// <summary>
+        /// The subscription of the event, if the game is completed we call the receivevalues to then call the
+        /// createjsonfile. In the end we fire the end screen of the ui.
+        /// </summary>
         private void GameCompleted()
         {
             ReceiveValues();
@@ -67,6 +71,11 @@ namespace CaromBilliards.CoreMechanic
             _playTimeManager.HowMuchTimePassedSinceStart();
         }
         
+        /// <summary>
+        /// We create the json string we want to save and assign it to a string, then using the filestream we open
+        /// the path where we want to save the data and using streamwriter we write to the file the string we got
+        /// from the jsonutility
+        /// </summary>
         private void CreateJsonAndFile()
         {
             _toJSON = JsonUtility.ToJson(_saveGame);
@@ -76,12 +85,20 @@ namespace CaromBilliards.CoreMechanic
             streamWriter.Close();
             fs.Close();
         }
-
+        
+        /// <summary>
+        /// We receive the values from the ui manager that tell us what are the en dresults
+        /// </summary>
         private void ReceiveValues()
         {
             _saveGame.score = scoreManager.score;
             _saveGame.shotsMade = totalShotsManager.totalShotsMade;
             _saveGame.timeElapsed = _playTimeManager.timeElapsedInUnity;
+        }
+
+        public void ExitGame()
+        {
+            SceneManager.LoadScene("MainMenu");
         }
     }
 }

@@ -588,6 +588,8 @@ GameObject:
   - component: {fileID: 222799250}
   - component: {fileID: 222799249}
   - component: {fileID: 222799248}
+  - component: {fileID: 222799251}
+  - component: {fileID: 222799252}
   m_Layer: 5
   m_Name: FadeImage
   m_TagString: Untagged
@@ -643,9 +645,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: a272af41041cba14996079865d1ddb8b, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
+  m_Maskable: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -667,6 +669,88 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 222799246}
   m_CullTransparentMesh: 1
+--- !u!114 &222799251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 222799246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: becacad0e2127c742865533efbbda572, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnStartingFade:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 241027923}
+        m_TargetAssemblyTypeName: CaromBilliards.CoreMechanic.ReplayState.Replay,
+          Assembly-CSharp
+        m_MethodName: PreventPlayerFromShooting
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnFullFade:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 241027923}
+        m_TargetAssemblyTypeName: CaromBilliards.CoreMechanic.ReplayState.Replay,
+          Assembly-CSharp
+        m_MethodName: StartOnFirstPosition
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnBlankFade:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 241027923}
+        m_TargetAssemblyTypeName: CaromBilliards.CoreMechanic.ReplayState.Replay,
+          Assembly-CSharp
+        m_MethodName: StartPlayBack
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  fadePercentage: 1
+  canFade: 0
+--- !u!95 &222799252
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 222799246}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3b70c77f5a24a0a4a9919bcbe71f1d1b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &241027921
 GameObject:
   m_ObjectHideFlags: 0
@@ -765,7 +849,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 963194227}
-  rotationSpeed: 180
+  rotationSpeed: 360
 --- !u!1 &462908651
 GameObject:
   m_ObjectHideFlags: 0
@@ -1223,16 +1307,16 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 241027923}
-        m_TargetAssemblyTypeName: CaromBilliards.CoreMechanic.Replay.Replay, Assembly-CSharp
-        m_MethodName: StartPlayback
-        m_Mode: 1
+      - m_Target: {fileID: 222799252}
+        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
+        m_MethodName: Play
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Fading
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &519830968
@@ -2534,7 +2618,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 906962901}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 120049044}
+        m_TargetAssemblyTypeName: CaromBilliards.CoreMechanic.GameManager, Assembly-CSharp
+        m_MethodName: ExitGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &906962901
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5097,7 +5193,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 568015152807705278, guid: ad4c155a4fb8ade41891800acc2d4348, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.032
+      value: -0.016
       objectReference: {fileID: 0}
     - target: {fileID: 568015152807705278, guid: ad4c155a4fb8ade41891800acc2d4348, type: 3}
       propertyPath: m_LocalPosition.y
@@ -5105,7 +5201,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 568015152807705278, guid: ad4c155a4fb8ade41891800acc2d4348, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.67
+      value: 0.525
       objectReference: {fileID: 0}
     - target: {fileID: 568015152807705278, guid: ad4c155a4fb8ade41891800acc2d4348, type: 3}
       propertyPath: m_LocalRotation.w
@@ -5152,7 +5248,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9004480263843815202, guid: 9a8f2e805d182464ebdfca69cafc1dbb, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.042
+      value: -0.018
       objectReference: {fileID: 0}
     - target: {fileID: 9004480263843815202, guid: 9a8f2e805d182464ebdfca69cafc1dbb, type: 3}
       propertyPath: m_LocalPosition.y

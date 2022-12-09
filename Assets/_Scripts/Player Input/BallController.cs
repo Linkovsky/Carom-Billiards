@@ -25,7 +25,6 @@ namespace CaromBilliards.Player_Input
         [SerializeField] private float distanceRay;
         [FormerlySerializedAs("forceSpeed")] [SerializeField] private float powerShot;
         [SerializeField] private AudioClip[] audioClips;
-        [SerializeField] private AudioMixer audioMixer;
         private Transform _transform;
         private Rigidbody _myRigidbody;
         private SphereCollider _sphereCollider;
@@ -52,8 +51,8 @@ namespace CaromBilliards.Player_Input
 
         private void ReplayOnOnPlayBackState()
         {
-            _onReplay = !_onReplay;
             lineRenderer.enabled = false;
+            _onReplay = !_onReplay;
         }
 
         private void OnDisable()
@@ -80,7 +79,12 @@ namespace CaromBilliards.Player_Input
                 CuePower();
             }
         }
-
+        
+        /// <summary>
+        /// Draws the line using line renderer, we draw it using a ray we fire from the cue ball returning a value
+        /// made by the raycasthit that tell us if we hit an object, we assign those values to the last index of the
+        /// line renderer so the line moves as we move the camera.
+        /// </summary>
         private void DrawLineRenderer()
         {
             lineRenderer.enabled = true;
@@ -129,7 +133,13 @@ namespace CaromBilliards.Player_Input
         }
         
         private void InstanceOnOnAllRigidbodysStopped() => _canPlay = true;
-
+        
+        /// <summary>
+        /// Using a coroutine we apply force to the cue ball, we fist turn to false all the booleans related to the player
+        /// being able to shoot again and then we wait for a single frame and apply the force to the cue ball.
+        /// We then update the ui shot text through game manager
+        /// </summary>
+        /// <returns></returns>
         private IEnumerator ApplyForce()
         {
             isShooting = false;
@@ -155,8 +165,7 @@ namespace CaromBilliards.Player_Input
             }
             else if (collision.gameObject.CompareTag("Wall"))
             {
-                audioMixer.GetFloat("MasterVolume", out float value);
-                _audioSource.volume = Mathf.Clamp01(collision.relativeVelocity.magnitude / 20f);
+                _audioSource.volume = Mathf.Clamp01(collision.relativeVelocity.magnitude / 20f); // 20 being the maximum velocity allowed
                 _audioSource.clip = audioClips[2];
                 _audioSource.Play();
             }

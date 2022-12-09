@@ -16,12 +16,14 @@ namespace CaromBilliards.Sounds
         private float _sliderValue;
         private void Start()
         {
+            // We check if value was modified, to prevent it going back to 0 or 1 
             if (_value != 0)
             {
                 volumeSlider.value = _value;
             }
             else
             {
+                //We check if the file exists and assign the value to the slider
                 if (AudioManager.Instance != null && File.Exists(AudioManager.Instance.path))
                 {
                     _value = AudioManager.Instance.LoadFromJSON();
@@ -33,6 +35,10 @@ namespace CaromBilliards.Sounds
                 }
             }
         }
+        /// <summary>
+        /// We assign the value we get from the slider using the slider itself, so more like a dynamic function
+        /// </summary>
+        /// <param name="sliderValue">The value from the slider</param>
         public void ChangeVolume(float sliderValue)
         {
             _sliderValue = sliderValue;
