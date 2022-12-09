@@ -24,7 +24,6 @@ namespace CaromBilliards.CoreMechanic
         public Score scoreManager;
         public TotalShots totalShotsManager;
         public UIManager uiManager;
-        
         private Rigidbody _playerRigidbody;
         private StringBuilder _totalShotsStringBuilder;
         private SaveManager _saveGame;
@@ -33,17 +32,8 @@ namespace CaromBilliards.CoreMechanic
         private string _toJSON;
         private string _filePath;
 
-        private void OnEnable()
-        {
-            scoreManager.GameCompleted += GameCompleted;
-        }
-
-        
-
-        private void OnDisable()
-        {
-            scoreManager.GameCompleted -= GameCompleted;
-        }
+        private void OnEnable() => Score.GameCompleted += GameCompleted;
+        private void OnDisable() => Score.GameCompleted -= GameCompleted;
         
         private void GameCompleted()
         {

@@ -1,6 +1,9 @@
+using System.Collections;
 using CaromBilliards.BallType;
 using CaromBilliards.CoreMechanic;
-using CaromBilliards.Sounds;
+using CaromBilliards.CoreMechanic.PlayState;
+using CaromBilliards.CoreMechanic.ReplayState;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Serialization;
@@ -9,8 +12,13 @@ namespace CaromBilliards.Player_Input
 {
     public class BallController : MonoBehaviour
     {
+        public delegate void Shoot();
+
+        public static event Shoot OnShoot;
         [field: HideInInspector] public float timePower { get; private set; }
         public bool isShooting { get; private set; }
+
+        public bool CanPlay => _canPlay;
         [SerializeField] private Transform parentOfCamTransform;
         [SerializeField] private LineRenderer lineRenderer;
         [SerializeField] private BallSO respectiveBall;
@@ -24,6 +32,9 @@ namespace CaromBilliards.Player_Input
         private AudioSource _audioSource;
         private float _rotation;
         private float _actualRadius;
+        private bool _canPlay;
+        private bool _onReplay;
+        private bool _isGameManagerNull;
         private void Awake()
         {
             respectiveBall.ApplyMaterial(GetComponent<MeshRenderer>());
@@ -33,24 +44,39 @@ namespace CaromBilliards.Player_Input
             _audioSource = GetComponent<AudioSource>();
         }
 
+        private void OnEnable()
+        {
+                PlayStateManager.OnAllRigidbodysStopped += InstanceOnOnAllRigidbodysStopped;
+                Replay.OnPlayBackState += ReplayOnOnPlayBackState;
+        }
+
+        private void ReplayOnOnPlayBackState()
+        {
+            _onReplay = !_onReplay;
+            lineRenderer.enabled = false;
+        }
+
+        private void OnDisable()
+        {
+                PlayStateManager.OnAllRigidbodysStopped -= InstanceOnOnAllRigidbodysStopped;
+                Replay.OnPlayBackState -= ReplayOnOnPlayBackState;
+        }
         private void Start()
         {
+            _canPlay = true;
+            _isGameManagerNull = GameManager.Instance; 
             _actualRadius = _sphereCollider.radius * Mathf.Max(_transform.lossyScale.x,_transform.lossyScale.y,_transform.lossyScale.z);
         } 
 
         private void Update()
         {
-            if (GameManager.Instance == null) return;
+            if (!_isGameManagerNull) return;
             if (GameManager.Instance.scoreManager.gameCompleted) return;
-            if (Input.GetMouseButton(0) && !GameManager.Instance.scoreManager.isBallMoving)
-            {
+            if (Input.GetMouseButton(0))
                 RotatePlayerWithCamera();
+            if (_canPlay && !_onReplay)
+            {
                 DrawLineRenderer();
-            }
-            else
-                lineRenderer.enabled = false;
-            if (!GameManager.Instance.scoreManager.isBallMoving)
-            { 
                 CuePower();
             }
         }
@@ -73,18 +99,14 @@ namespace CaromBilliards.Player_Input
             if (Input.GetKey(KeyCode.Space))
             {
                 isShooting = true;
-                DrawLineRenderer();
                 if (timePower >= 20.0f) return;
                 timePower += 10f * Time.deltaTime;
             }
             else if (Input.GetKeyUp(KeyCode.Space))
             {
-                _audioSource.PlayOneShot(audioClips[0]);
-                isShooting = false;
-                _myRigidbody.AddForce(_transform.forward * (powerShot * timePower), ForceMode.Impulse);
-                timePower = 0;
-                lineRenderer.enabled = false;
-                GameManager.Instance.totalShotsManager.SetTotalShots();
+                _canPlay = false;
+                OnShoot?.Invoke();
+                StartCoroutine(ApplyForce());
             }
         }
 
@@ -105,7 +127,20 @@ namespace CaromBilliards.Player_Input
         {
             return new Ray(_transform.position, _transform.forward * value);
         }
+        
+        private void InstanceOnOnAllRigidbodysStopped() => _canPlay = true;
 
+        private IEnumerator ApplyForce()
+        {
+            isShooting = false;
+            lineRenderer.enabled = false;
+            yield return null;
+            _myRigidbody.AddForce(_transform.forward * (powerShot * timePower), ForceMode.Impulse);
+            _audioSource.PlayOneShot(audioClips[0]);
+            timePower = 0;
+            GameManager.Instance.totalShotsManager.SetTotalShots();
+        }
+        
         private void OnCollisionEnter(Collision collision)
         {
             if (collision.gameObject.layer == 6)

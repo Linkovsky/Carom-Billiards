@@ -8,7 +8,7 @@ namespace CaromBilliards.CoreMechanic.ScoreBoard
     public struct Score
     {
         public delegate void GameCompletedHandler();
-        public event GameCompletedHandler GameCompleted;
+        public static event GameCompletedHandler GameCompleted;
         public bool isBallMoving { get; private set; }
         public bool gameCompleted { get; private set; }
         public int score { get; private set; }
